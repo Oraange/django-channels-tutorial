@@ -1,0 +1,69 @@
+<!-- projects/templates/projects/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Projects Page</title>
+</head>
+<body>
+    <div class="wrapper">
+        Current State: {{ state }}<br><br>
+        <div class="box" id="state"></div>
+    </div>
+
+    <style>
+        div.wrapper{
+            font-size: 25;
+            max-width: 850px;
+            display: block;
+            margin-left: 50%;
+            margin-right: auto;
+            margin-top: 10%;
+        }
+        div.box{
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+            border-radius: 5em;
+            border-color: black;
+        }
+    </style>
+
+    <script>
+        // const state = JSON.parse(document.getElementById('state').textContent);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/projects'
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            console.log(e)
+            var data = JSON.parse(e.data);
+            var message = data["message"]
+            var state = data["state"]
+
+            if (state === 1) {
+                document.querySelector("#state").style.background = "red"
+            }
+            else if (state === 2) {
+                document.querySelector("#state").style.background = "green"
+            }
+            else if (state === 3) {
+                document.querySelector("#state").style.background = "yellow"
+            }
+            else if (state === 4) {
+                document.querySelector("#state").style.background = "blue"
+            }
+            else if (state === 5) {
+                document.querySelector("#state").style.background = "black"
+            }
+        }
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly')
+        }
+    </script>
+</body>
+</html>
