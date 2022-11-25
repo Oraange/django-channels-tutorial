@@ -8,17 +8,31 @@
 <body>
     <form action="/users/signup/" method="post">
         <b>아이디</b>
-        <input type="text" name="name" placeholder="아이디 입력">
+        <input type="text" name="name" placeholder="아이디 입력"><br><br>
 
         <b>비밀번호</b>
-        <input type="password" name="password" placeholder="비밀번호 입력">
+        <input type="password" id="pw" name="password" placeholder="비밀번호 입력"><br><br>
 
-        <input type="submit" value="제출">
-        {% if msg == "ok" %}
-        <script>
-            alert("회원가입이 완료되었습니다.")
-        </script>
-        {% endif %}
+        <b>비밀번호 확인</b>
+        <input type="password" id="cnfpw" name="confirmpw" placeholder="비밀번호 확인">
+
+        <input type="submit" onclick=confirm() value="제출">
     </form>
 </body>
+<script type="text/javascript">
+    function confirm() {
+        var p1 = document.getElementById("pw").value;
+        var p2 = document.getElementById("cnfpw").value;
+
+        if (p1.length < 6) {
+            window.alert("패스워드가 너무 짧습니다.");
+            return false
+        }
+
+        if (p1 != p2) {
+            alert("패스워드가 일치하지 않습니다");
+            return false
+        } else { return true; }
+    }
+</script>
 </html>

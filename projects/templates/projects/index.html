@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="wrapper">
-        Current State: {{ state }}<br><br>
+        <div id="stc">프로젝트 생성 전</div><br><br>
         <div class="box" id="state"></div>
     </div>
 
@@ -41,23 +41,27 @@
         chatSocket.onmessage = function(e) {
             console.log(e)
             var data = JSON.parse(e.data);
-            var message = data["message"]
             var state = data["state"]
 
             if (state === 1) {
                 document.querySelector("#state").style.background = "red"
+                document.getElementById("stc").innerHTML = "프로젝트 생성중"
             }
             else if (state === 2) {
                 document.querySelector("#state").style.background = "green"
+                document.getElementById("stc").innerHTML = "프로젝트 생성 완료"
             }
             else if (state === 3) {
                 document.querySelector("#state").style.background = "yellow"
+                document.getElementById("stc").innerHTML = "STT 진행중"
             }
             else if (state === 4) {
                 document.querySelector("#state").style.background = "blue"
+                document.getElementById("stc").innerHTML = "STT 진행 완료"
             }
             else if (state === 5) {
                 document.querySelector("#state").style.background = "black"
+                document.getElementById("stc").innerHTML = "오류 발생"
             }
         }
 

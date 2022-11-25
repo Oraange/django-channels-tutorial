@@ -9,6 +9,7 @@ class ProjectManager(models.Manager):
 
 class Project(TimeStamp):
     state = models.PositiveSmallIntegerField()
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
     objects = ProjectManager()
 
@@ -22,6 +23,14 @@ class Project(TimeStamp):
         project.save(using="alertdb")
 
     @classmethod
-    def create_project(cls, state: int) -> None:
+    def generate(cls, state: int) -> None:
         project = cls(state=state)
         project.save(using="alertdb")
+
+    @classmethod
+    def get_by_user(cls, user_id: int):
+        try:
+            return cls.objects.filter(user_id=user_id).first()
+
+        except cls.DoesNotExist:
+            return None

@@ -146,3 +146,5 @@ DATABSE_ROUTERS = [
 
 # Authentication
 AUTH_USER_MODEL = "users.User"
+
+APPEND_SLASH = False

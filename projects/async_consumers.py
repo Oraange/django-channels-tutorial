@@ -19,8 +19,9 @@ def send_state(sender, instance, created, **kwargs):
 
 class ProjectConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["user"]
+        # self.user = self.scope["user"]
         self.group_name = "share"
+        self.user = self.scope["user"]
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 
@@ -41,5 +42,6 @@ class ProjectConsumer(AsyncWebsocketConsumer):
     async def change_state(self, event):
         state = event["state"]
         print(f"State: {state}")
+        print(self.user)
 
         await self.send(text_data=json.dumps({"state": state}))

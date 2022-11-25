@@ -18,10 +18,20 @@ class UserManager(BaseUserManager):
         user = self.model(nickname=nickname, **extra_fields)
         user.set_password(password)
         user.save(using="alertdb")
-
         return user
 
     def create_user(self, nickname: str, password: str, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(nickname, password, **extra_fields)
+
+    def create_superuser(self, nickname: str, password: str, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if not extra_fields.get('is_staff'):
+            raise ValueError('Superuser must have is_staff=True')
+
         return self._create_user(nickname, password, **extra_fields)
 
     def get_queryset(self, *args, **kwargs):
@@ -30,6 +40,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStamp):
     nickname = models.CharField("아이디", max_length=50, unique=True)
+    is_staff = models.BooleanField("관리자 권한", default=False)
 
     objects = UserManager()
 
@@ -48,3 +59,5 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStamp):
 
         except cls.DoesNotExist:
             return None
+
+    

@@ -5,12 +5,11 @@ from django.shortcuts import redirect, render
 from users.models import User
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    return render(request, "users/signup.html")
-
-
 def signup(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
+    if request.method == "GET":
+        return render(request, "users/signup.html")
+
+    elif request.method == "POST":
         data = request.POST.dict()
         nickname = data["name"]
         password = data["password"]
@@ -40,7 +39,8 @@ def signin(request: HttpRequest) -> HttpResponse:
             return redirect("https://http.cat/401")
 
         if user.check_password(password):
-            request.session["user_id"] = user.nickname
+            request.session["user_id"] = user.id
             login(request, user)
+            request.session.save()
 
         return redirect("/projects")
