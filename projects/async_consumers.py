@@ -14,13 +14,26 @@ from .models import Project
 def send_state(sender, instance, created, **kwargs):
     if not created:
         channel_layer=get_channel_layer()
-        async_to_sync(channel_layer.group_send)("share", {"type": "change_state", "state": instance.state})
+        async_to_sync(channel_layer.group_send)(
+            f"share_{instance.user.nickname}",
+            {
+                "type": "change_state",
+                "state": instance.state,
+                "project_id": instance.id
+            }
+        )
 
 
 class ProjectConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # self.user = self.scope["user"]
-        self.group_name = "share"
+        self.conn_time = time.time()
+        self.group_name = "share_" + str(self.scope["user"])
+        print("===========================")
+        print("user: ", self.scope["user"])
+        print("group: ", self.group_name)
+        print("channel_name: ", self.channel_name)
+        print("Connect Time: ", time.time() - self.conn_time)
+        print("===========================")
         self.user = self.scope["user"]
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
@@ -28,6 +41,9 @@ class ProjectConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
+        print("===========================")
+        print(f"Connected Time: {time.time() - self.conn_time}")
+        print("===========================")
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     # 여기선 사용 X
@@ -41,7 +57,7 @@ class ProjectConsumer(AsyncWebsocketConsumer):
 
     async def change_state(self, event):
         state = event["state"]
-        print(f"State: {state}")
-        print(self.user)
+        project_id = event["project_id"]
 
-        await self.send(text_data=json.dumps({"state": state}))
+        #close argument를 넣을 경우 send 후 종료가 가능한 것처럼 보임
+        await self.send(text_data=json.dumps({"state": state, "project_id": project_id}))

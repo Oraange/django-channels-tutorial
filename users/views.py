@@ -1,4 +1,4 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth import get_user_model, login
 from django.shortcuts import redirect, render
 
@@ -38,9 +38,9 @@ def signin(request: HttpRequest) -> HttpResponse:
         if not user:
             return redirect("https://http.cat/401")
 
-        if user.check_password(password):
-            request.session["user_id"] = user.id
-            login(request, user)
-            request.session.save()
+        if not user.check_password(password):
+            return JsonResponse({"message": "Log in Failed"}, status=401)
+
+        login(request, user)
 
         return redirect("/projects")

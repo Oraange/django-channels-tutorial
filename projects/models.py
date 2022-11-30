@@ -17,8 +17,8 @@ class Project(TimeStamp):
         db_table = 'project'
 
     @classmethod
-    def patch_state(cls, project_id: int, state: int) -> None:
-        project: Project = cls.objects.get(id=project_id)
+    def patch_state(cls, project_id: int, user_id: int, state: int) -> None:
+        project: Project = cls.objects.get(id=project_id, user_id=user_id, deleted_at__isnull=True)
         project.state = state
         project.save(using="alertdb")
 
@@ -29,8 +29,4 @@ class Project(TimeStamp):
 
     @classmethod
     def get_by_user(cls, user_id: int):
-        try:
-            return cls.objects.filter(user_id=user_id).first()
-
-        except cls.DoesNotExist:
-            return None
+        return cls.objects.filter(user_id=user_id)

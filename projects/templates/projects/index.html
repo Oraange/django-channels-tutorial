@@ -6,10 +6,12 @@
     <title>Projects Page</title>
 </head>
 <body>
+    {% for project in projects %}
     <div class="wrapper">
-        <div id="stc">프로젝트 생성 전</div><br><br>
-        <div class="box" id="state"></div>
+        <div id="stc_{{project.id}}">project id: {{project.id}}</div>
+        <div class="box" id="state_{{project.id}}">state: {{project.state}}</div>
     </div>
+    {% endfor %}
 
     <style>
         div.wrapper{
@@ -26,6 +28,7 @@
             background-color: aqua;
             border-radius: 5em;
             border-color: black;
+            text-align: center;
         }
     </style>
 
@@ -41,27 +44,35 @@
         chatSocket.onmessage = function(e) {
             console.log(e)
             var data = JSON.parse(e.data);
-            var state = data["state"]
+            var state = data["state"];
+            var projectId = data["project_id"];
+            var elementId = "stc_" + projectId;
+            var boxId = "#state_" + projectId;
 
             if (state === 1) {
-                document.querySelector("#state").style.background = "red"
-                document.getElementById("stc").innerHTML = "프로젝트 생성중"
+                document.querySelector(boxId).style.background = "red"
+                document.querySelector(boxId).innerHTML = "state: " + state
+                document.getElementById(elementId).innerHTML = "프로젝트 생성중"
             }
             else if (state === 2) {
-                document.querySelector("#state").style.background = "green"
-                document.getElementById("stc").innerHTML = "프로젝트 생성 완료"
+                document.querySelector(boxId).style.background = "green"
+                document.querySelector(boxId).innerHTML = "state: " + state
+                document.getElementById(elementId).innerHTML = "프로젝트 생성 완료"
             }
             else if (state === 3) {
-                document.querySelector("#state").style.background = "yellow"
-                document.getElementById("stc").innerHTML = "STT 진행중"
+                document.querySelector(boxId).style.background = "yellow"
+                document.querySelector(boxId).innerHTML = "state: " + state
+                document.getElementById(elementId).innerHTML = "STT 진행중"
             }
             else if (state === 4) {
-                document.querySelector("#state").style.background = "blue"
-                document.getElementById("stc").innerHTML = "STT 진행 완료"
+                document.querySelector(boxId).style.background = "blue"
+                document.querySelector(boxId).innerHTML = "state: " + state
+                document.getElementById(elementId).innerHTML = "STT 진행 완료"
             }
             else if (state === 5) {
-                document.querySelector("#state").style.background = "black"
-                document.getElementById("stc").innerHTML = "오류 발생"
+                document.querySelector(boxId).style.background = "black"
+                document.querySelector(boxId).innerHTML = "state: " + state
+                document.getElementById(elementId).innerHTML = "오류 발생"
             }
         }
 
