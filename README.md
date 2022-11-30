@@ -8,6 +8,7 @@
   - `django-channels-tutorial/chat/async_consumers.py` 및 `django-channels-tutorial/chat/sync_consumers.py`에 웹소켓 통신 코드 작성
   - `async_consumers.py`는 비동기 consumer, `sync_consumers.py`는 동기 consumer를 구현한 것이다. 자세한 내용은 [공식 문서의 Consumers](https://channels.readthedocs.io/en/stable/topics/consumers.html) 참고
 <br>
+
 - url
   - `http://localhost:8000/chat`
   - `http://localhost:8000/chat/<room_name>`
