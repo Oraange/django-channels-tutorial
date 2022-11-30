@@ -6,9 +6,6 @@ from .models import Project
 def handle_exception(func):
     def wrapper(self, request, *args, **kwargs):
         try:
-            if not request.user:
-                return JsonResponse({"message": "No Session"}, status=401)
-
             return func(self, request, *args, **kwargs)
 
         except Project.DoesNotExist:

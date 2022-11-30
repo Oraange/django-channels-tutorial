@@ -6,12 +6,19 @@
     <title>Projects Page</title>
 </head>
 <body>
-    {% for project in projects %}
-    <div class="wrapper">
-        <div id="stc_{{project.id}}">project id: {{project.id}}</div>
-        <div class="box" id="state_{{project.id}}">state: {{project.state}}</div>
-    </div>
-    {% endfor %}
+    {% if not user.is_authenticated %}
+        <div>로그인을 먼저 해주세요!
+            <button type="submit" formaction="http://localhost:8000/users/signup">회원가입 하러 가기</button>
+        </div>
+
+    {% else %}
+        {% for project in projects %}
+        <div class="wrapper">
+            <div id="stc_{{project.id}}">project id: {{project.id}}</div>
+            <div class="box" id="state_{{project.id}}">state: {{project.state}}</div>
+        </div>
+        {% endfor %}
+    {% endif %}
 
     <style>
         div.wrapper{
