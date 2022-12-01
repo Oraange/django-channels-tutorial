@@ -1,5 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import redirect, render
 
 from users.models import User
@@ -44,3 +44,8 @@ def signin(request: HttpRequest) -> HttpResponse:
         login(request, user)
 
         return redirect("/projects")
+
+def signout(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        logout(request)
+        return redirect("/users/signin")

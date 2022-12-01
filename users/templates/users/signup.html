@@ -16,8 +16,11 @@
         <b>비밀번호 확인</b>
         <input type="password" id="cnfpw" name="confirmpw" placeholder="비밀번호 확인">
 
-        <input type="submit" onclick=confirm() value="제출">
+        <input type="submit" onclick=confirm() value="제출"><br><br><br><br>
     </form>
+    <div>
+        이미 회원이세요? <button type="submit" onClick="location.href='/users/signin'">로그인 하러 가기</button>
+    </div>
 </body>
 <script type="text/javascript">
     function confirm() {
